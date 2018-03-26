@@ -108,42 +108,73 @@ describe('subscribe hoc', () => {
             })
         })
         describe('with custom mapStateToProps', () => {
-            const c0 = new TestController(initialState0)
-            const c1 = new TestController(initialState1)
             const combine = (a, b) => a + ' ' + b
             
-            it('shoud give the correct arguments to mapStateToProps', done => {
-                const otherProp = 'inventing a string shoundnt be this hard'
-                const SubscribedTestComponent = subscribe({ c0, c1 })(
-                    (state, ownProps) => {
-                        expect(state).toEqual({
-                            c0: initialState0,
-                            c1: initialState1,
-                        })
-                        expect(ownProps).toEqual({
-                            otherProp
-                        })
-                        done()
-                    }
-                )(TestComponent)
-                shallow(<SubscribedTestComponent otherProp={otherProp}/>).unmount()
+            describe('mapStateToProps arguments', () => {
+                const c0 = new TestController(initialState0)
+                const c1 = new TestController(initialState1)
+
+                it('shoud pass the correct arguments when mouting', done => {
+                    const otherProp = 'inventing a string shoundnt be this hard'
+                    const SubscribedTestComponent = subscribe({ c0, c1 })(
+                        (state, ownProps) => {
+                            expect(state).toEqual({
+                                c0: initialState0,
+                                c1: initialState1,
+                            })
+                            expect(ownProps).toEqual({
+                                otherProp
+                            })
+                            done()
+                        }
+                    )(TestComponent)
+                    shallow(<SubscribedTestComponent otherProp={otherProp}/>).unmount()
+                })
+                it('should pass the correct arguments when the controller\'s state changes', () => {
+                    const mapStateToProps = ({ c0, c1 }) => ({ c0, c1 })
+                    const mstpSpy = sinon.spy(mapStateToProps)
+
+                    const SubscribedTestComponent = subscribe({ c0, c1 })(
+                        mstpSpy
+                    )(TestComponent)
+                    const wrapper = shallow(<SubscribedTestComponent />)
+                    
+                    const newState0 = 'new state 0'
+                    c0.set(newState0)
+
+                    expect(mstpSpy.calledWith({ c0: newState0, c1: initialState1 }))
+                    expect(mstpSpy.callCount).toBe(2)
+                    wrapper.unmount()
+                })
             })
-            it('should pass the right props', () => {
+            describe('passing props to the decorated component', () => {
+                const c0 = new TestController(initialState0)
+                const c1 = new TestController(initialState1)
+
                 const mapStateToProps = ({ c0, c1 }) => ({
                     combined: combine(c0, c1)
                 })
                 const SubscribedTestComponent = subscribe({ c0, c1 })(mapStateToProps)(TestComponent)
                 const wrapper = mount(<SubscribedTestComponent />)
-                expect(
-                    wrapper.find(TestComponent).props()
-                ).toEqual({
-                    combined: combine(initialState0, initialState1)
+
+                it('should pass the right props', () => {
+                    expect(
+                        wrapper.find(TestComponent).props().combined
+                    ).toEqual(combine(initialState0, initialState1))
+                })
+                it('should pass the right props when the controller\'s state changes', () => {
+                    const newState0 = 'new state 0'
+                    c0.set(newState0)
+                    expect(
+                        wrapper.update().find(TestComponent).props().combined
+                    ).toEqual(combine(newState0, initialState1))
                 })
             })
         })
     })
-    describe('updating a controller\'s state', () => {
-        
+
+    describe('passing actions to controllers', () => {
+
     })
     describe.skip('causing actions from the decorated component', () => {
         const initialState = 'test value'
