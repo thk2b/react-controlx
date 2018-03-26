@@ -28,6 +28,7 @@ export default subscribe(filter)(
     mapControllersToProps
   )(TodoList)
 )
+// recieves todos: [ { id: 123, text: 'this', done: false }, ... ]
 
 export default subscribe(filter, todos)(TodoList) 
 // TodoList filters according to the filter, not anyhing in between
