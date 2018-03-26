@@ -22,12 +22,23 @@ export default controllers => Component => {
                 unsubscribe => unsubscribe()
             )
         }
+        mapControllersToProps(){
+            return Object.keys(controllers).reduce(
+                (props, name) => ({
+                    ...props,
+                    [name]: {
+                        ...controllers[name],
+                        state: this.state[name],
+                    }
+                })
+            , {})
+        }
         render(){
             return <Component
-                {...this.state}
+                {...this.mapControllersToProps()}
                 {...this.props}
             >
-                {this.children}
+                {this.props.children}
             </Component>
         }
     }

@@ -16,27 +16,46 @@ describe('subscribe hoc', () => {
     }
     const initialState = 'test value'
     const controller = new TestController(initialState)
-    const TestComponent = ({ controller }) => {
+    const TestComponent = ({ controller, children }) => {
         return <div>
-            {controller}
+           {controller.state}
         </div>
     }
     const SubscribedTestComponent = subscribe({ controller })(TestComponent)
 
-    test('should render the decorated component', () => {
-        const wrapper = mount(<SubscribedTestComponent />)
-        expect(wrapper.find('div').exists()).toBe(true)
-        wrapper.unmount()
+    describe('rendering the decorated component', () => {
+        const child = ''
+        const wrapper = mount(
+            <SubscribedTestComponent testProp={1}>
+                <span>child1</span>
+                <span>child2</span>
+            </SubscribedTestComponent>
+        )
+        afterAll(() => wrapper.unmount())
+        it('should render the decorated component', () => {
+            expect(wrapper.find('div').exists()).toBe(true)
+        })
+        it('should pass props down to the decorated component', () => {
+            expect(wrapper.find(TestComponent).props().testProp).toBe(1)
+        })
+        it('should pass children down to the decorated component', () => {
+            expect(wrapper.find(TestComponent).props().children.length).toBe(2)
+        })
+        
     })
-    it('should pass it the controller\'s state', () => {
+    describe('recieving the controller\'s state as props', () => {
         const wrapper = mount(<SubscribedTestComponent />)
-        expect(wrapper.find(TestComponent).props().controller).toEqual(initialState)
+        it('should include the state on the controller\'s prop', () => {
+            expect(wrapper.find(TestComponent).props().controller.state).toEqual(initialState)
+        })
     })
-    it('should update the component when the controller updates', () => {
+    describe('updating the controller\'s state', () => {
         const wrapper = mount(<SubscribedTestComponent />)
-        const newState = 'new value'
-        controller.set(newState)
-        wrapper.update()
-        expect(wrapper.find(TestComponent).props().controller).toEqual(newState) 
+        it('should update the component', () => {
+            const newState = 'new value'
+            controller.set(newState)
+            wrapper.update()
+            expect(wrapper.find(TestComponent).props().controller.state).toEqual(newState) 
+        })
     })
 })
