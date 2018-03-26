@@ -31,4 +31,5 @@ export default subscribe(filter)(
 
 export default subscribe(filter, todos)(TodoList) 
 // TodoList filters according to the filter, not anyhing in between
+// recieves all filter actions, methods and state as props: { filter: { state: 'DONE', ok: todo => Boolean, set: String }}
 ```
