@@ -1,18 +1,28 @@
 import React from 'react'
 
-export default controllers => Component => {
-    return class extends React.Component {
+const getDisplayName = Component => {
+    Component.displayName || Component.name ||'Anonymous'
+}
+
+const defaultMapStateToProps = state => state
+const defaultMapActionsToProps = props => ({})
+
+export default controllers => (
+    mapStateToProps=defaultMapStateToProps,
+    mapActionsToProps=defaultMapActionsToProps
+) => Component => {
+    class SubscribedComponent extends React.Component {
         constructor(props){
             super(props)
             this.state = {}
             this.unsubscribe = {}
         }
-        componentDidMount = () => {
+        componentWillMount = () => {
             Object.entries(controllers).forEach(
                 ([name, controller]) => {
                     const unsubscribe = controller.subscribe(
                         state => this.setState({ [name]: state })
-                    )
+                    ).bind(controller)
                     this.unsubscribe[name] = unsubscribe
                 }
             )
@@ -22,24 +32,18 @@ export default controllers => Component => {
                 unsubscribe => unsubscribe()
             )
         }
-        mapControllersToProps(){
-            return Object.keys(controllers).reduce(
-                (props, name) => ({
-                    ...props,
-                    [name]: {
-                        ...controllers[name],
-                        state: this.state[name],
-                    }
-                })
-            , {})
-        }
         render(){
-            return <Component
-                {...this.mapControllersToProps()}
-                {...this.props}
-            >
-                {this.props.children}
+            const { children, ...rest} = this.props
+            const props = {
+                ...rest,
+                ...mapActionsToProps(this.props),
+                ...mapStateToProps(this.state, this.props)
+            }
+            return <Component {...props}>
+                {children}
             </Component>
         }
     }
+    SubscribedComponent.displayName = `subscribe(${getDisplayName(Component)})`
+    return SubscribedComponent
 }
