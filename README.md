@@ -16,18 +16,18 @@ import subscribe from 'react-controlx'
 import List from 'oui/List'
 import { todosFilter } from '../../filter'
 
-mapControllers = ({ filter, todos }) => ({
+const mapStateToProps = () => ({
   items: Object.values(...todos.getWhere(
     todo => todosFilter.ok(todo)
   ))
 })
 
-export default subscribe({ filter, todos },
-    mapControllers
+const mapActionsToProps = () => ({
+  setFilter: filter.set.bind(filter)
+})
+
+export default subscribe({ filter, todos })(
+    mapStateToProps, mapActionsToProps
 )(List)
 // recieves todos: [ { id: 123, text: 'this', done: false }, ... ]
-
-export default subscribe(filter, todos)(TodoList) 
-// TodoList filters according to the filter, not anyhing in between
-// recieves all filter actions, methods and state as props: { filter: { state: 'DONE', ok: todo => Boolean, set: String }}
 ```
