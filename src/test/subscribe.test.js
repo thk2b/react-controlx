@@ -46,47 +46,6 @@ describe('subscribe hoc', () => {
             expect(Object.keys(controller._subscribers).length).toBe(0)
         })
     })
-    describe('recieving state from a single controller', () => {
-        describe('with default mapStateToProps', () => {
-            const initialState = 'test value'
-            const controller = new TestController(initialState)
-            const SubscribedTestComponent = subscribe({ controller })()(TestComponent)
-            const wrapper = mount(<SubscribedTestComponent />)
-    
-            afterAll(() => wrapper.unmount())
-            it('should pass the controller\'s state in props, with the correct name', () => {
-                expect(wrapper.find(TestComponent).props().controller).toEqual(initialState)
-            })
-        })
-        describe('with custom mapStateToProps', () => {
-            const initialState = 'test value'
-            const controller = new TestController(initialState)
-            const SubscribedTestComponent = subscribe({ controller })(
-                ({ controller }) => ({ myCustomKey: controller })
-            )(TestComponent)
-            const wrapper = mount(<SubscribedTestComponent />)
-    
-            afterAll(() => wrapper.unmount())
-            it('should pass the controller\'s state in props, with the correct name', () => {
-                expect(wrapper.find(TestComponent).props().myCustomKey).toEqual(initialState)
-            })
-        })
-        describe('updating the controller\'s state', () => {
-            // TODO: move me to next describe
-            const initialState = 'test value'
-            const controller = new TestController(initialState)
-            const SubscribedTestComponent = subscribe({ controller })()(TestComponent)
-            const wrapper = mount(<SubscribedTestComponent />)
-    
-            afterAll(() => wrapper.unmount())
-            it('should update the component', () => {
-                const newState = 'new value'
-                controller.set(newState)
-                wrapper.update()
-                expect(wrapper.find(TestComponent).props().controller).toEqual(newState) 
-            })
-        })
-    })
     describe('recieving state from controllers', () => {        
         const initialState0 = 'test value 0'
         const initialState1 = 'test value 1'
