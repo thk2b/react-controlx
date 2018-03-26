@@ -114,7 +114,7 @@ describe('subscribe hoc', () => {
                 const c0 = new TestController(initialState0)
                 const c1 = new TestController(initialState1)
 
-                it('shoud pass the correct arguments when mouting', done => {
+                it('shoud pass the correct arguments when mouting', () => {
                     const otherProp = 'inventing a string shoundnt be this hard'
                     const SubscribedTestComponent = subscribe({ c0, c1 })(
                         (state, ownProps) => {
@@ -125,7 +125,6 @@ describe('subscribe hoc', () => {
                             expect(ownProps).toEqual({
                                 otherProp
                             })
-                            done()
                         }
                     )(TestComponent)
                     shallow(<SubscribedTestComponent otherProp={otherProp}/>).unmount()
@@ -172,23 +171,50 @@ describe('subscribe hoc', () => {
             })
         })
     })
-
     describe('passing actions to controllers', () => {
-
-    })
-    describe.skip('causing actions from the decorated component', () => {
-        const initialState = 'test value'
+        const initialState = 'initial state'
         const controller = new TestController(initialState)
-        const SubscribedTestComponent = subscribe({ controller })()(TestComponent)
-        const wrapper = mount(<SubscribedTestComponent />)
 
-        afterAll(() => wrapper.unmount())
-        it('should update the controller and notify subscribers', () => {
-            const callback = sinon.spy()
-            controller.subscribe(callback)
+        describe('mapActionsToProps arguments', () => {
+            const someProp = 'some prop'
+            const mapActionsToProps = ownProps => {
+                expect(ownProps).toEqual({ someProp })
+                return {}
+            }
+            const SubscribedTestComponent = subscribe({ controller })(undefined, mapActionsToProps)(TestComponent)
+            shallow(<SubscribedTestComponent someProp={someProp} />).unmount()
+        })
+        describe('passing actions as component props', () => {
             const newState = 'new state'
-            wrapper.find(TestComponent).props().controller.set(newState)
-            expect(callback.calledOnceWith(newState))
+            const Component = ({ controller, set }) => (
+                <div onClick={e => {
+                    set(newState)
+                }}>hi</div>
+            )
+            const mapStateToProps = ({ controller }) => ({ value: controller })
+            const mapActionsToProps = () => {
+                return { set: controller.set.bind(controller) }
+            }
+            const SubscribedTestComponent = subscribe({ controller })
+                (mapStateToProps, mapActionsToProps)
+            (Component)
+            const wrapper = mount(<SubscribedTestComponent />)
+
+            const component = wrapper.find(Component)
+            afterAll(() =>  wrapper.unmount())
+            it('should pass the result of mapActionsToProps as props', () => {
+                expect(typeof component.props().set).toEqual('function')
+            })    
+            it('calling the action should cause the controller and component to update', () => {
+                const spy = sinon.spy()
+                controller.subscribe(spy)
+
+                component.find('div').first().simulate('click')
+                expect(spy.calledWith(newState))
+                expect(
+                    wrapper.find(Component).props().value
+                ).toBe(newState)
+            })
         })
     })
 })
