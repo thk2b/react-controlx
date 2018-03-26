@@ -13,21 +13,18 @@ subscribe(
 ```js 
 // todos/index.js
 import subscribe from 'react-controlx'
-import { todos, Todos } from '../'
+import List from 'oui/List'
 import { todosFilter } from '../../filter'
 
-mapControllersToProps(){
-  todos: todos.getWhere(
+mapControllers = ({ filter, todos }) => ({
+  items: Object.values(...todos.getWhere(
     todo => todosFilter.ok(todo)
-  )
-}
+  ))
+})
 
-export default subscribe(filter)(
-  subscribe(
-    todos,
-    mapControllersToProps
-  )(TodoList)
-)
+export default subscribe({ filter, todos },
+    mapControllers
+)(List)
 // recieves todos: [ { id: 123, text: 'this', done: false }, ... ]
 
 export default subscribe(filter, todos)(TodoList) 
