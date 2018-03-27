@@ -1,4 +1,4 @@
-# react-controlx
+# react-xcontrol
 Subscribe a react component to a controlx controller
 
 # Usage
