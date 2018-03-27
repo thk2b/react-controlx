@@ -16,8 +16,8 @@ import subscribe from 'react-controlx'
 import List from 'oui/List'
 import { todosFilter } from '../../filter'
 
-const mapStateToProps = () => ({
-  items: Object.values(...todos.getWhere(
+const mapStateToProps = ({ todos }) => ({
+  items: Object.values(...where(todos,
     todo => todosFilter.ok(todo)
   ))
 })
