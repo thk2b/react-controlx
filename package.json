@@ -1,7 +1,7 @@
 {
-  "name": "react-controlx",
+  "name": "react-xcontrol",
   "version": "0.0.1",
-  "description": "Subscribe a react component to a controlx controller",
+  "description": "Subscribe a react component to a xcontrol controller",
   "main": "lib/index.js",
   "scripts": {
     "test": "jest",
@@ -10,18 +10,18 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/thk2b/react-controlx.git"
+    "url": "git+https://github.com/thk2b/react-xcontrol.git"
   },
   "keywords": [
     "react",
-    "controlx"
+    "xcontrol"
   ],
   "author": "thk2b",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/thk2b/react-controlx/issues"
+    "url": "https://github.com/thk2b/react-xcontrol/issues"
   },
-  "homepage": "https://github.com/thk2b/react-controlx#readme",
+  "homepage": "https://github.com/thk2b/react-xcontrol#readme",
   "peerDependencies": {
     "react": "^16.2.0"
   },
@@ -32,12 +32,12 @@
     "babel-preset-env": "^1.6.1",
     "babel-preset-react": "^6.24.1",
     "babel-preset-stage-0": "^6.24.1",
-    "controlx": "^0.0.1",
     "enzyme": "^3.3.0",
     "enzyme-adapter-react-16": "^1.1.1",
     "jest": "^22.4.3",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
-    "sinon": "^4.4.8"
+    "sinon": "^4.4.8",
+    "xcontrol": "^0.0.1"
   }
 }
