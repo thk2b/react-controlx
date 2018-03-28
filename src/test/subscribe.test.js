@@ -4,14 +4,14 @@ import Adapter from 'enzyme-adapter-react-16'
 import sinon from 'sinon'
 
 // import TestController from './TestController'
-import { Controller } from 'controlx'
+import { Controller } from 'xcontrol'
 import subscribe from '../subscribe'
 
 Enzyme.configure({ adapter: new Adapter() })
 
 class TestController extends Controller {
     set(value){
-        this.state = value
+        this.store = value
     }
 }
 const TestComponent = () => {
@@ -46,7 +46,7 @@ describe('subscribe hoc', () => {
             expect(Object.keys(controller._subscribers).length).toBe(0)
         })
     })
-    describe('recieving state from controllers', () => {        
+    describe('recieving store from controllers', () => {        
         const initialState0 = 'test value 0'
         const initialState1 = 'test value 1'
 
@@ -57,7 +57,7 @@ describe('subscribe hoc', () => {
             const wrapper = mount(<SubscribedTestComponent />)
             
             afterAll(() => wrapper.unmount())
-            it('should provide the controlers\'s state', () => {
+            it('should provide the controlers\'s store', () => {
                 expect(
                     wrapper.find(TestComponent).props()
                 ).toEqual({
@@ -88,7 +88,7 @@ describe('subscribe hoc', () => {
                     )(TestComponent)
                     shallow(<SubscribedTestComponent otherProp={otherProp}/>).unmount()
                 })
-                it('should pass the correct arguments when the controller\'s state changes', () => {
+                it('should pass the correct arguments when the controller\'s store changes', () => {
                     const mapStateToProps = ({ c0, c1 }) => ({ c0, c1 })
                     const mstpSpy = sinon.spy(mapStateToProps)
 
@@ -120,7 +120,7 @@ describe('subscribe hoc', () => {
                         wrapper.find(TestComponent).props().combined
                     ).toEqual(combine(initialState0, initialState1))
                 })
-                it('should pass the right props when the controller\'s state changes', () => {
+                it('should pass the right props when the controller\'s store changes', () => {
                     const newState0 = 'new state 0'
                     c0.set(newState0)
                     expect(
