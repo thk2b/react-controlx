@@ -36,7 +36,7 @@ export default Component => class ComponentController extends createModel(React.
     render(){
         const { children, ...props } = this.props
         const { state } = this 
-        // console.log(state)
+
         return <Component
             {...props }    
             {...state }

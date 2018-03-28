@@ -39,7 +39,7 @@ describe('connect HOC', () => {
         class ConnectedTestComponent extends computed({ value })(
 
         )(connect(TestComponent)){}
-        const wrapper = mount(<ConnectedTestComponent />)
+        const wrapper = mount(<ConnectedTestComponent hi/>)
 
         it('should have the initialState', () => {
             expect(wrapper.find(TestComponent).props().value).toEqual(initialState)
