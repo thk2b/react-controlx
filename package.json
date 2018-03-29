@@ -22,7 +22,7 @@
     "url": "https://github.com/thk2b/react-xcontrol/issues"
   },
   "homepage": "https://github.com/thk2b/react-xcontrol#readme",
-  "peerDependencies": {
+  "dependencies": {
     "react": "^16.2.0"
   },
   "devDependencies": {
