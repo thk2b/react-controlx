@@ -102,11 +102,6 @@ const runTestSuite = ([componentType, TestComponent]) => {
 
                         const expectedPrevState1 = expectedState
                         expect(spy.calledOnceWith(expectedState, expectedInitialState, expectedPrevState1))
-
-                        // shallow(<ComputedTestComponent otherProp={otherProp}/>).unmount()
-                    })
-                    it('should allow renaming controllers', () => {
-                        
                     })
                     it('should pass the correct arguments when the controller\'s store changes', () => {
                         const mapStateToProps = ({ c0, c1 }, { otherProp }) => ({ c0, c1, otherProp })
