@@ -1,33 +1,10 @@
 # react-xcontrol
 Subscribe a react component to a controlx controller
 
-# Usage
-```js
-subscribe(
-  controllerInstance,
-  mapStateToProps,
-  mapActionsToProps
-)
-```
+# API
 
-```js 
-// todos/index.js
-import subscribe from 'react-controlx'
-import List from 'oui/List'
-import { todosFilter } from '../../filter'
+- `Connect( Component )`
+Returns a `xcontrol.Controller` that updates the component whenever the store updates.
 
-const mapStateToProps = ({ todos }) => ({
-  items: Object.values(...where(todos,
-    todo => todosFilter.ok(todo)
-  ))
-})
-
-const mapActionsToProps = () => ({
-  setFilter: filter.set.bind(filter)
-})
-
-export default subscribe({ filter, todos })(
-    mapStateToProps, mapActionsToProps
-)(List)
-// recieves todos: [ { id: 123, text: 'this', done: false }, ... ]
-```
+- `Computed( Component )( controllers, mapState )`
+Returns a `React.Component` that renders the wrapped component with the result of mapState on the combined state of the controllers. When any of their stores updates, the component also updates with the new mapped state.
