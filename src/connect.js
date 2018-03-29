@@ -9,17 +9,17 @@ import invariant from './lib/invariant'
  */
 
 export default Component => class ComponentController extends createModel(React.Component){
-    constructor(selectedProps){
-        super(selectedProps)
-        // invariant(this.store,
-        //     `In connect(${Component.name}):\n` +
-        //     `A ComponentController was found without a store.\n` +
-        //     `A connected React.Component must be wrapped in a \`computed\` call,\n` +
-        //     `otherwise the component will not be reactive.`
-        // )
+    constructor(props){
+        super(props)
     }
     componentWillMount = () => {
         this._isMounted = true
+        invariant(this.store,
+            `In connect(${Component.name}):\n` +
+            `A ComponentController was found without a store.\n` +
+            `A connected React.Component must be wrapped in a \`computed\` call,\n` +
+            `otherwise the component will not be reactive.`
+        )
         this.setState(this.store)
     }
     
