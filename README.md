@@ -2,10 +2,12 @@
 Subscribe a react component to a controlx controller
 
 # API
-- Reactive(Super)
+- `Reactive(Super)`
+
 Overrides the Super's store get/set to notify all subscribers.
 
-- Subscribe(Super)(controllers, mapState, mapActions)
+- `Subscribe(Super)(controllers, mapState, mapActions)`
+
 Subscribes the Super's store to the result of calling mapState with the combined state of all controllers. This value is recomputed whenever any controller's store update.
 
 # Usage
