@@ -1,5 +1,5 @@
-import { Controller } from 'xcontrol'
 import React from 'react'
+import { Controller } from 'xcontrol'
 
 import invariant from './lib/invariant'
 
@@ -8,7 +8,7 @@ import invariant from './lib/invariant'
  * It must be wrapped into a call to `computed` or `withActions`
  */
 
-export default Component => class ComponentController extends Controller(React.Component) {
+export default Component => class ComponentController extends Controller( React.Component ) {
     constructor(props){
         super(props)
     }
