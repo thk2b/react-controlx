@@ -14,12 +14,6 @@ export default Component => class ComponentController extends createModel(React.
     }
     componentWillMount = () => {
         this._isMounted = true
-        invariant(this.store,
-            `In connect(${Component.name}):\n` +
-            `A ComponentController was found without a store.\n` +
-            `A connected React.Component must be wrapped in a \`computed\` call,\n` +
-            `otherwise the component will not be reactive.`
-        )
         this.setState(this.store)
     }
     
@@ -45,8 +39,3 @@ export default Component => class ComponentController extends createModel(React.
         </Component>
     }
 }
-
-// Usage:
-// export default computed(connect(List),
-//     ({ controller }) => ({ items: controller })
-// )({ controller })
