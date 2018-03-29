@@ -84,19 +84,29 @@ const runTestSuite = ([componentType, TestComponent]) => {
                     const otherProp = 'other'
                     
                     it('shoud pass the correct arguments when mouting', () => {
+                        const mapStateToProps = (state, initialState, prevState) => state
+                        const spy = sinon.spy(mapStateToProps)
                         const ComputedTestComponent = Computed(Connect(TestComponent))(
-                            { c0, c1 }, (state, ownProps) => {
-                                expect(state).toEqual({
-                                    c0: initialState0,
-                                    c1: initialState1,
-                                })
-                                expect(ownProps).toEqual({
-                                    otherProp
-                                })
-                                return state
-                            }
+                            { c0, c1 }, spy
                         )
-                        shallow(<ComputedTestComponent otherProp={otherProp}/>).unmount()
+                        const expectedState = {
+                            c0: initialState0,
+                            c1: initialState1,
+                        }
+                        const expectedInitialState = { otherProp }
+                        const expectedPrevState0 = undefined
+
+                        expect(spy.calledOnceWith(expectedState, expectedInitialState, expectedPrevState0))
+
+                        c0.set(initialState0)
+
+                        const expectedPrevState1 = expectedState
+                        expect(spy.calledOnceWith(expectedState, expectedInitialState, expectedPrevState1))
+
+                        // shallow(<ComputedTestComponent otherProp={otherProp}/>).unmount()
+                    })
+                    it('should allow renaming controllers', () => {
+                        
                     })
                     it('should pass the correct arguments when the controller\'s store changes', () => {
                         const mapStateToProps = ({ c0, c1 }, { otherProp }) => ({ c0, c1, otherProp })
