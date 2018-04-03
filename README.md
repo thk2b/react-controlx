@@ -40,7 +40,7 @@ export default ComputedComponent ( MyComponent )({ myController }, mapStateToPro
 ```
 In this case, the exported component will recieve a `myComponent` prop.
 
-### causing actions from components
+### Causing actions from components
 ```js
 import React from 'react'
 import myController from '../controllers/myController'
