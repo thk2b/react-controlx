@@ -1,3 +1,5 @@
+`npm install --save react-xcontrol`
+
 # react-xcontrol
 Subscribe a react component to a controlx controller
 
